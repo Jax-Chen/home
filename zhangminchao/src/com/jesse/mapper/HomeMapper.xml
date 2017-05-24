@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HomeMapper">
+  <resultMap id="BaseResultMap" type="Home">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mark" jdbcType="VARCHAR" property="mark" />
+    <result column="z_index" jdbcType="INTEGER" property="zIndex" />
+    <result column="managerName" jdbcType="VARCHAR" property="managerName" />
+    <result column="managerMobile" jdbcType="VARCHAR" property="managerMobile" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, name, address, mark, z_index, managerName, managerMobile
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from home
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from home
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="Home">
+    insert into home (ID, name, address, 
+      mark, z_index, managerName, 
+      managerMobile)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{mark,jdbcType=VARCHAR}, #{zIndex,jdbcType=INTEGER}, #{managerName,jdbcType=VARCHAR}, 
+      #{managerMobile,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="Home">
+    insert into home
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="mark != null">
+        mark,
+      </if>
+      <if test="zIndex != null">
+        z_index,
+      </if>
+      <if test="managerName != null">
+        managerName,
+      </if>
+      <if test="managerMobile != null">
+        managerMobile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null">
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="zIndex != null">
+        #{zIndex,jdbcType=INTEGER},
+      </if>
+      <if test="managerName != null">
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerMobile != null">
+        #{managerMobile,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="Home">
+    update home
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null">
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="zIndex != null">
+        z_index = #{zIndex,jdbcType=INTEGER},
+      </if>
+      <if test="managerName != null">
+        managerName = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerMobile != null">
+        managerMobile = #{managerMobile,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="Home">
+    update home
+    set name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      mark = #{mark,jdbcType=VARCHAR},
+      z_index = #{zIndex,jdbcType=INTEGER},
+      managerName = #{managerName,jdbcType=VARCHAR},
+      managerMobile = #{managerMobile,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  
+  <select id="listHomeByQuery" resultMap="BaseResultMap" parameterType="HomeQuery">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from home h
+  	order by h.z_index desc,h.id desc 
+  	limit #{beginIndex},#{pageSize}
+  	
+  </select>
+  
+  <select id="listHomeByQueryCount" resultType="int"  parameterType="HomeQuery">
+  	select count(1)
+  	from home h
+  </select>
+  
+  <delete id="deleteHomeById" parameterType="int">
+  	delete from home where id = #{homeId}
+  </delete>
+  
+  <select id="listAllHome" resultMap="BaseResultMap">
+  	select * from home 
+  </select>
+  
+  <select id="selectHomeByName" parameterType="string" resultMap="BaseResultMap">
+  	select * from home where name = #{name}
+  </select>
+  
+  <select id="selectHomeById" parameterType="int" resultMap="BaseResultMap">
+  	select * from home where id = #{id}
+  </select>
+  
+  <select id="checkHomeByName" parameterType="map" resultMap="BaseResultMap">
+  	select * from home where name = #{name} and id != #{id}
+  </select>
+  
+</mapper>

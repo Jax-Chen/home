@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>  
+    
+    <!-- 
+    	延迟加载的配置，两个配置都得配置，有一个不配置，延迟加载就不启用
+     -->
+    <settings>
+    	<!-- 
+    		延迟加载的总开关，value=true则开启延迟加载
+    	 -->
+	 	<setting name="lazyLoadingEnabled" value="true"/>
+	 	<!-- 
+	 		启用延迟加载，当value=“false”的时候才是开启延迟加载
+	 	 -->
+	 	<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+    
+    <!-- 
+    
+    	非自定义别名：
+    		1.jdk中的所有类都使用了非自定别名，别名内容是类名的所有字母不区分大小写，例如java.util.Map 直接使用map就可以
+    		2.jadk中的所有包装类型都可以使用它的基本数据类型来替代，例如java.util.Integer 直接使用int就可以
+     -->
+    
+    <typeAliases>
+    	<!-- 
+    		自定义别名
+    		type：为需要被别名定义的数据类型
+    		alias：别名
+    	 -->
+    	<typeAlias type="com.jesse.domain.User" alias="User"/>
+    	<typeAlias type="com.jesse.domain.Orders" alias="Orders"/>
+    	<typeAlias type="com.jesse.domain.Home" alias="Home"/>
+    	<typeAlias type="com.jesse.domain.Notice" alias="Notice"/>
+    	<typeAlias type="com.jesse.domain.Chat" alias="Chat"/>
+    	<typeAlias type="com.jesse.domain.SystemUser" alias="SystemUser"/>
+    	<typeAlias type="com.jesse.domain.query.UserQuery" alias="UserQuery"/>
+    	<typeAlias type="com.jesse.domain.query.HomeQuery" alias="HomeQuery"/>
+    	<typeAlias type="com.jesse.domain.query.OrderQuery" alias="OrderQuery"/>
+    	<typeAlias type="com.jesse.domain.query.NoticeQuery" alias="NoticeQuery"/>
+    	<typeAlias type="com.jesse.domain.query.ChatQuery" alias="ChatQuery"/>
+    </typeAliases>
+     
+    
+    <!-- 定义的mapper文件的目录，注意要使用“/”区分目录，而不是使用“.” -->
+     <mappers>
+         <mapper resource="com/jesse/mapper/UserMapper.xml"/>
+         <mapper resource="com/jesse/mapper/OrdersMapper.xml"/>
+         <mapper resource="com/jesse/mapper/HomeMapper.xml"/>
+         <mapper resource="com/jesse/mapper/SystemUserMapper.xml"/>
+         <mapper resource="com/jesse/mapper/NoticeMapper.xml"/>
+         <mapper resource="com/jesse/mapper/ChatMapper.xml"/>
+         
+     </mappers>
+</configuration>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OrdersMapper" >
+  <resultMap id="BaseResultMap" type="Orders" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="completeTime" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="mark" property="mark"  />
+    <result column="name" property="name"  />
+    <result column="mobile" property="mobile"  />
+    <result column="address" property="address"  />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, code, userId, status, createTime, completeTime, mark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="Orders" >
+    insert into orders (ID, code, userId, type,
+      status, createTime, completeTime, 
+      mark)
+    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, #{type},
+      #{status,jdbcType=INTEGER}, now(), #{completeTime,jdbcType=TIMESTAMP}, 
+      #{mark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="completeTime != null" >
+        completeTime,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null" >
+        #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="Orders" >
+    update orders
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null" >
+        completeTime = #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="Orders" >
+    update orders
+    set code = #{code,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      completeTime = #{completeTime,jdbcType=TIMESTAMP},
+      mark = #{mark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="listOrdersByQuery" resultMap="BaseResultMap" parameterType="OrderQuery">
+  	select 
+  	o.ID, o.code, o.userId, o.status, o.createTime, o.completeTime, o.mark,o.type
+  	,u.name as name,u.mobile as mobile,u.address as address 
+  	from orders o
+  	left join user u on o.userId = u.id
+  	<if test="userId != null" >
+        where o.userId = #{userId}
+    </if>
+  	order by o.id desc
+  </select>
+  
+  <select id="listOrdersByQueryCount" resultType="int"  parameterType="OrderQuery">
+  	select count(1)
+  	from orders o
+  	left join user u on o.userId = u.id
+  	<if test="userId != null" >
+        where o.userId = #{userId}
+    </if>
+  </select>
+  
+</mapper>

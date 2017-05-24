@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- 
+	namespace:mapper文件的唯一标识
+	规则：通常使用需要查询的对象的全路径，例如com.jax.model.Person
+ -->
+<mapper namespace="com.jax.model.Person">
+
+	<!-- 
+		resultMap:组装数据库表中查询出来的自定义实体类（将数据库里查询出来的映射给实体类）
+		type:实体类
+		id:resultMap 的唯一标识
+	 -->
+	<resultMap type="com.jax.model.Person" id="baseResultMap">
+		<!-- 
+			id列只有一个主键
+			column:表中的字段名
+			property:实体类的属性名
+		 -->
+		<id column="person_id" property="personId"/>
+		<result column="name" property="name"/>
+		<result column="gender" property="gender"/>
+		<result column="person_addr" property="personAddr"/>
+		<result column="birthday" property="birthday"/>
+
+	</resultMap>
+	
+	
+	<!-- 
+		mybatis把所用的sql语句提取到了配置文件当中
+		id:sql语句的唯一标识，用于怎么找到这个sql语句
+		paramterType:传入参数的类型
+		resultType:返回结果的类型
+		参数变量：
+			#{}:select * from person_test where id = ?	使用preparedStatement
+			${}:"select * from person_test where id = " + id
+	 -->
+    <select id="selectPersonById" parameterType="java.lang.Integer" resultMap="baseResultMap" >
+        select * from person where person_id = #{id}
+    </select>
+    
+    <!-- 
+    	查询结果不需要映射的时候使用resultType，比如查询数量
+     -->
+    <select id="selectPersonCount" resultType="java.lang.Integer">
+    	select count(1) from person
+    </select>
+    
+    <sql id="colums">
+    	person_id,name,gender,person_addr,birthday
+    </sql>
+    
+    <!-- 
+    	查询结果为List的时候，并不是在配置文件里体现出来，而是在java类里面用selectList()方法
+     -->
+    <select id="selectPersonAll" resultMap="baseResultMap">
+    	select <include refid="colums"/> from person
+    </select>
+    
+    <!-- 
+    	查询数据库有条件时，第一种方法：传递查询对象
+    	QueryCondition c = new QueryCondition();
+		c.setGender(1);
+		c.setBirthday(new Date());
+		
+		#{}通过查询对象属性的getter方法来取值，内容直接填属性名就OK
+     -->
+    <select id="selectPersonByParams" parameterType="com.jax.model.QueryCondition" resultMap="baseResultMap">
+    	<![CDATA[
+	    	select * from person p where p.gender = #{gender} and p.birthday > #{birthday}
+    	]]>
+    </select>
+    
+    <!-- 
+    	查询数据库又条件时，第二种方法：传递Map集合
+    	Map<String,Object> map = new HashMap<String,Object>();
+		map.put("gender", 1);
+		map.put("birthday", new Date());
+		
+		#{}中的内容为map中的key
+     -->
+    <select id="selectPersonByParams1" parameterType="java.util.Map" resultMap="baseResultMap">
+    	<![CDATA[
+	    	select * from person p where p.gender = #{gender} and p.birthday > #{birthday}
+    	]]>
+    </select>
+    
+    <!-- 
+    	${}非预编译，直接拼成sql语句，使用模糊查询的时候需要使用这种
+     -->
+    <select id="selectPersonByParams2" parameterType="java.util.Map" resultMap="baseResultMap">
+    	<![CDATA[
+	    	select * from person p where p.name like '%${name}%'
+    	]]>
+    </select>
+    
+    <!-- ====================================库表变更================================================== -->
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.jax.model.Person">
+    	<!--
+    		selectKey是做主键返回用的
+    		keyProperty：接收返回主键的属性
+    		order：insert语句和生成主键的sql的执行顺序，mysql是AFTER,oracle是BEFORE
+    		resultType：返回主键的数据类型
+    		生成主键的sql：select LAST_INSERT_ID()
+    		**注意：oracle和mysql生成主键的sql语句不通
+    	  -->
+    	<selectKey keyProperty="personId" order="AFTER" resultType="java.lang.Integer">
+    		select LAST_INSERT_ID()
+    	</selectKey>  
+    	insert into person (person_id,name,gender,person_addr,birthday) 
+    	values(#{personId},#{name},#{gender},#{personAddr},#{birthday})
+    </insert>
+    
+    <!-- 更新数据库数据 -->
+    <update id="update" parameterType="com.jax.model.Person">
+    	update person t set 
+    	t.name = #{name},
+    	t.gender = #{gender},
+    	t.person_addr = #{personAddr},
+    	t.birthday = #{birthday}
+    	where t.person_id = #{personId}
+    </update>
+    
+    <!-- 删除数据库数据 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+    	delete from person where person_id =#{id}
+    </delete>
+    
+    <!-- 
+    	<where>用于动态条件组合查询，可以去掉where后面的第一个and
+     -->
+    <select id="selectPersonByCondition" parameterType="qc" resultMap="baseResultMap">
+    	select * from person t 
+    	<where>
+    		<if test="name != null">
+    			and t.name like '%${name}%' 
+    		</if>
+    		<if test="gender != null">
+    			and t.gender = #{gender}
+    		</if>
+    		<if test="birthday != null">
+    			and t.birthday = #{birthday}
+    		</if>
+    		<if test="personAddr != null">
+    			and t.person_addr like '%${personAddr}%'
+    		</if>
+    	</where>
+    </select>
+    
+
+</mapper>
+
+

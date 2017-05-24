@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserMapper" >
+  <resultMap id="BaseResultMap" type="com.jesse.domain.User" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="home_id" property="homeId" jdbcType="INTEGER" />
+    <result column="uname" property="uname" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="pw_answer" property="pwAnswer" jdbcType="VARCHAR" />
+    <result column="pw_question" property="pwQuestion" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="region_id" property="regionId" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zip" property="zip" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="lastlogin" property="lastlogin" jdbcType="BIGINT" />
+    <result column="logincount" property="logincount" jdbcType="INTEGER" />
+    <result column="face" property="face" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="homeName" property="homeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jesse.domain.User" extends="BaseResultMap" >
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, home_id, uname, email, password, pw_answer, pw_question, name, sex, birthday, 
+    province_id, city_id, region_id, province, city, region, address, zip, mobile, tel, 
+    lastlogin, logincount, face, nickname
+  </sql>
+  <sql id="Blob_Column_List" >
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jesse.domain.User" >
+    insert into user (ID, home_id, uname, 
+      email, password, pw_answer, 
+      pw_question, name, sex, 
+      birthday, province_id, city_id, 
+      region_id, province, city, 
+      region, address, zip, 
+      mobile, tel, lastlogin, 
+      logincount, face, nickname, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{homeId,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{pwAnswer,jdbcType=VARCHAR}, 
+      #{pwQuestion,jdbcType=VARCHAR}, #{name}, #{sex,jdbcType=INTEGER}, 
+      #{birthday}, #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, 
+      #{regionId,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{region,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{zip,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{lastlogin,jdbcType=BIGINT}, 
+      #{logincount,jdbcType=INTEGER}, #{face,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jesse.domain.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="homeId != null" >
+        home_id,
+      </if>
+      <if test="uname != null" >
+        uname,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="pwAnswer != null" >
+        pw_answer,
+      </if>
+      <if test="pwQuestion != null" >
+        pw_question,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="regionId != null" >
+        region_id,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="region != null" >
+        region,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="zip != null" >
+        zip,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="lastlogin != null" >
+        lastlogin,
+      </if>
+      <if test="logincount != null" >
+        logincount,
+      </if>
+      <if test="face != null" >
+        face,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="homeId != null" >
+        #{homeId,jdbcType=INTEGER},
+      </if>
+      <if test="uname != null" >
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="pwAnswer != null" >
+        #{pwAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="pwQuestion != null" >
+        #{pwQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="regionId != null" >
+        #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogin != null" >
+        #{lastlogin,jdbcType=BIGINT},
+      </if>
+      <if test="logincount != null" >
+        #{logincount,jdbcType=INTEGER},
+      </if>
+      <if test="face != null" >
+        #{face,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jesse.domain.User" >
+    update user
+    <set >
+      <if test="homeId != null" >
+        home_id = #{homeId,jdbcType=INTEGER},
+      </if>
+      <if test="uname != null" >
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="pwAnswer != null" >
+        pw_answer = #{pwAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="pwQuestion != null" >
+        pw_question = #{pwQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="regionId != null" >
+        region_id = #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null" >
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        zip = #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="lastlogin != null" >
+        lastlogin = #{lastlogin,jdbcType=BIGINT},
+      </if>
+      <if test="logincount != null" >
+        logincount = #{logincount,jdbcType=INTEGER},
+      </if>
+      <if test="face != null" >
+        face = #{face,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jesse.domain.User" >
+    update user
+    set home_id = #{homeId,jdbcType=INTEGER},
+      uname = #{uname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      pw_answer = #{pwAnswer,jdbcType=VARCHAR},
+      pw_question = #{pwQuestion,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      region_id = #{regionId,jdbcType=INTEGER},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip = #{zip,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      lastlogin = #{lastlogin,jdbcType=BIGINT},
+      logincount = #{logincount,jdbcType=INTEGER},
+      face = #{face,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jesse.domain.User" >
+    update user
+    set home_id = #{homeId,jdbcType=INTEGER},
+      uname = #{uname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      pw_answer = #{pwAnswer,jdbcType=VARCHAR},
+      pw_question = #{pwQuestion,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      region_id = #{regionId,jdbcType=INTEGER},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      zip = #{zip,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      lastlogin = #{lastlogin,jdbcType=BIGINT},
+      logincount = #{logincount,jdbcType=INTEGER},
+      face = #{face,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="selectUserByQuery_where">
+		<trim prefix="where" prefixOverrides="and">
+		   <if test="@Ognl@isNotEmpty(homeName)">
+		      and h.name like CONCAT('%',#{homeName}, '%')
+		   </if>
+		   <if test="@Ognl@isNotEmpty(mobile)">
+		      and u.mobile like CONCAT('%',#{mobile}, '%')
+		   </if>
+		   <if test="@Ognl@isNotEmpty(uname)">
+		      and u.uname like CONCAT('%',#{uname}, '%')
+		   </if>
+		   <if test="@Ognl@isNotEmpty(address)">
+		      and u.address like CONCAT('%',#{address}, '%')
+		   </if>
+		   <if test="@Ognl@isNotEmpty(email)">
+		      and u.email = #{email}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createFromTime)">
+				and <![CDATA[DATE_FORMAT(u.createTime, '%Y%m%d') >= DATE_FORMAT(#{createFromTime},'%Y%m%d')]]>
+			</if>
+			<if test="@Ognl@isNotEmpty(createEndTime)">
+			    and <![CDATA[DATE_FORMAT(u.createTime, '%Y%m%d') <= DATE_FORMAT(#{createEndTime},'%Y%m%d')]]>
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdayFromTime)">
+				and <![CDATA[DATE_FORMAT(u.birthday, '%Y%m%d') >= DATE_FORMAT(#{birthdayFromTime},'%Y%m%d')]]>
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdayEndTime)">
+			    and <![CDATA[DATE_FORMAT(u.birthday, '%Y%m%d') <= DATE_FORMAT(#{birthdayEndTime},'%Y%m%d')]]>
+			</if>
+		</trim>
+	</sql>
+  
+  
+  <select id="selectUserByNameAndPassword" resultMap="ResultMapWithBLOBs" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user
+    where uname = #{uname} and password = #{password}
+  </select>
+  
+  <select id="listUserByQuery" resultMap="ResultMapWithBLOBs" parameterType="UserQuery">
+  	select h.name as homeName,
+  	u.ID, u.home_id, u.uname, u.email, u.password, u.pw_answer, u.pw_question, u.name, u.sex, u.birthday, u.
+    province_id, u.city_id, u.region_id, u.province, u.city, u.region, u.address, u.zip, u.mobile, u.tel, u.
+    lastlogin, u.logincount, u.face, u.nickname,
+    <include refid="Blob_Column_List" />
+  	from user u
+  	left join home h on h.id = u.home_id
+  	<include refid="selectUserByQuery_where" />
+  	order by u.id desc 
+  	limit #{beginIndex},#{pageSize}
+  	
+  </select>
+  
+  <select id="listUserByQueryCount" resultType="int"  parameterType="UserQuery">
+  	select count(1)
+  	from user u
+  	<if test="@Ognl@isNotEmpty(homeName)">
+      left join home h on h.id = u.home_id
+   	</if>
+  	<include refid="selectUserByQuery_where" />
+  </select>
+  
+  <delete id="deleteUserById" parameterType="int">
+  	delete from user where id = #{userId}
+  </delete>
+  
+  <select id="selectUserByUname" resultMap="ResultMapWithBLOBs" parameterType="string">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where uname = #{uname}
+  </select>
+  
+  <select id="selectUserByMobile" resultMap="ResultMapWithBLOBs" parameterType="string">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where mobile = #{mobile}
+  </select>
+  
+  <select id="selectUserByEmail" resultMap="ResultMapWithBLOBs" parameterType="string">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where email = #{email}
+  </select>
+  
+  <select id="selectUserById" resultMap="ResultMapWithBLOBs" parameterType="int">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where id = #{id}
+  </select>
+  
+  <select id="checkUserByUname" resultMap="ResultMapWithBLOBs" parameterType="map">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where uname = #{uname} and id != #{id}
+  </select>
+  
+  <select id="checkUserByMobile" resultMap="ResultMapWithBLOBs" parameterType="map">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where mobile = #{mobile} and id != #{id}
+  </select>
+  
+  <select id="checkUserByEmail" resultMap="ResultMapWithBLOBs" parameterType="map">
+  		 select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from user
+	    where email = #{email} and id != #{id}
+  </select>
+  
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ChatMapper" >
+  <resultMap id="BaseResultMap" type="Chat" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="receive" property="receive" jdbcType="INTEGER" />
+    <result column="send" property="send" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, receive, send, content, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from chat
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from chat
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="Chat" >
+    insert into chat (id, receive, send, 
+      content, createTime)
+    values (#{id,jdbcType=INTEGER}, #{receive,jdbcType=INTEGER}, #{send,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="Chat" >
+    insert into chat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="receive != null" >
+        receive,
+      </if>
+      <if test="send != null" >
+        send,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="receive != null" >
+        #{receive,jdbcType=INTEGER},
+      </if>
+      <if test="send != null" >
+        #{send,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="Chat" >
+    update chat
+    <set >
+      <if test="receive != null" >
+        receive = #{receive,jdbcType=INTEGER},
+      </if>
+      <if test="send != null" >
+        send = #{send,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="Chat" >
+    update chat
+    set receive = #{receive,jdbcType=INTEGER},
+      send = #{send,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="listChatByQuery" resultMap="BaseResultMap" parameterType="ChatQuery">
+  	select 
+  	c.id, c.receive, c.send, c.content, c.createTime,IFNULL(u.name,"管理员") as name
+  	from chat c
+  	left join user u on c.send = u.id
+  	order by c.id asc
+  </select>
+  
+  <select id="listChatByQueryCount" resultType="int"  parameterType="ChatQuery">
+  	select count(1)
+  	from chat c
+  </select>
+  
+</mapper>

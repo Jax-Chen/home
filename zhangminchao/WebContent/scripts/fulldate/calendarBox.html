@@ -1,0 +1,150 @@
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <script type="text/javascript" src="../../scripts/jquery-1.8.3.min.js"></script>
+ <style type=text/css>
+ td{font-size:12;font-home:arial;text-align:center}
+ td.dt{font-size:11;font-home:arial;text-align:left}
+ a{color:blue}
+ a:hover{color:red}
+ a.bt{color:#888888}
+ </style>
+ <script language=javascript>
+ <!--//
+ var str='',i,j,yy,mm,openbound,selectTdNode;
+ var fld1;
+ var wp=window.parent;
+ var cf=wp.document.getElementById("CalFrame");
+ var fld,curday,today=new Date();
+ today.setHours(0);today.setMinutes(0);today.setSeconds(0);today.setMilliseconds(0);
+ //var lastyear=today.getYear(),lastmonth=today.getMonth();
+ function parseDate(s)
+ {
+ var reg=new RegExp("[^0-9-]","")
+if(s.search(reg)>=0)return today;
+ var ss=s.split("-");
+if(ss.length!=3)return today;
+ if(isNaN(ss[0])||isNaN(ss[1])||isNaN(ss[2]))return today;
+ return new Date(parseInt(ss[0]),parseInt(ss[1])-1,parseInt(ss[2]));
+ }
+ function resizeCalendar(){cf.width=490;cf.height=325;}
+ function initCalendar()
+ {
+ if(fld1&&fld1.value.length>0){curday=new Date(fld1.value);}
+ else curday=today;
+ drawCalendar(curday.getFullYear(),curday.getMonth());
+ }
+ function drawCalendar(y,m)
+ {
+ var x=new Date(y,m,1),mv=x.getDay(),d=x.getDate(),de;
+ yy=x.getFullYear();mm=x.getMonth();
+ document.getElementById("yyyymm").innerHTML=yy+"."+(mm+1>9?mm+1:"0"+(mm+1));
+ for(var i=1;i<=mv;i++)
+ {
+   de=document.getElementById("d"+i);
+   de.innerHTML="";
+   de.bgColor="";
+ }
+ while(x.getMonth()==mm)
+ {
+ de=document.getElementById("d"+(d+mv));
+  if (x.getTime() > overDate) {
+      de.innerHTML="<div><font color=gray>未开放</font></div><input type=radio name=CalendarBox value="+d+" disabled><font color=#888888>"+d+"</font>";
+  } else if (x.getTime() < belowDate) {
+      de.innerHTML="<input type=radio name=CalendarBox value="+d+" disabled><font color=#888888>"+d+"</font>";
+  } else {
+   if (contains(overPersonsDates, x.getTime())) {
+      de.innerHTML="<div><font color=green>已满</font></div><input type=radio name=CalendarBox value="+d+" disabled><font color=#888888>"+d+"</font>";
+   } else if (!canChoseDates || contains(canChoseDates, x.getTime())) {
+	  de.innerHTML=(isAllDisabled?"":"<div><font color=black>可预约</font></div>")+"<input type=radio name=CalendarBox "+ (isAllDisabled?"disabled":"onclick=javascript:setDate(this,"+d+");")+" value="+d+"><font color=blue>"+d+"</font>";
+   } else {
+	  de.innerHTML="<input type=radio name=CalendarBox value="+d+" disabled><font color=#888888>"+d+"</font>";
+   }
+  }
+ if(x.getTime()== selectedDate){
+   de.bgColor="#dddddd";
+   $(de).find("input[type=radio]").prop("checked",true);
+   if ($(de).find("div")[0]){
+       $(de).find("div").html("已预约").css({"color":"red"});
+   } else {
+      $(de).prepend("<div><font color=red>已预约</font></div>");
+   }
+   
+   selectTdNode=de;
+ } else {
+   de.bgColor="white";
+ }
+ //if (isAllDisabled) { // 禁用
+  //  $(de).find("input[type=radio]").prop("disabled",true);
+ //}
+ 
+ x.setDate(++d);
+ }
+ while(d+mv<=42)
+ {
+ de=document.getElementById("d"+(d+mv));
+ de.innerHTML="";
+ de.bgColor="";
+ d++;
+ }
+ }
+ function setDate(obj, d)
+ {
+ if (selectTdNode) {
+ selectTdNode.bgColor="white";
+ $(selectTdNode).find("div").html("可预约").css({"color":"black"});
+ }
+ obj.parentNode.bgColor="#dddddd";
+ selectTdNode = obj.parentNode;
+ $(selectTdNode).find("div").html("已预约").css({"color":"red"});
+ var dstr=yy+"-"+(mm+1)+"-"+d;
+ fld1.value=dstr;
+ var tempSelected=yy+"/"+(mm+1)+"/"+d +" 00:00:00";
+ selectedDate = new Date(tempSelected).getTime();
+ }
+
+ function contains(array, item) {
+  if (array != null && array.length > 0) {
+	return RegExp("(^|,)" + item.toString() + "($|,)").test(array);
+  }
+  return false;
+ }
+
+ //-->
+ </script>
+ </head>
+ 
+<body topmargin=0 leftmargin=0 bottommargin=0 rightmargin=0 onload="resizeCalendar();">
+ <table id=tbl0 bgcolor=#336699 border=0 cellpadding=1 cellspacing=0><tr><td>
+ <table width=100% border=0 cellpadding=2 cellspacing=1 bgcolor=white>
+ <tr bgcolor=gray>
+ <td width=70 id=prev><a href=javascript:drawCalendar(yy,mm-1);><img src=Images/prev.gif border=0 width="16" height="16"></a></td>
+ <td width=350 id=yyyymm style=font-size:11;color:white></td>
+ <td width=70 id=next><a href=javascript:drawCalendar(yy,mm+1);><img src=Images/next.gif border=0 width="16" height="16"></a></td>
+ </tr>
+ </table>
+ <table width=100% border=0 bgcolor=white cellpadding=0 cellspacing=2>
+ <tr height=40><th width=70><font color=red>星期日</font></th><th width=70>星期一</th><th width=70>星期二</th><th width=70>星期三</th><th width=70>星期四</th><th width=70>星期五</th><th width=70><font color=red>星期六</font></th></tr>
+ <tr height=1><td colspan=7 bgcolor=gray></td></tr>
+ <script language=javascript>
+ <!--//
+ for(i=0;i<6;i++)
+ {
+ str+="<tr height=40>";
+ for(j=1;j<=7;j++)str+="<td id=d"+(i*7+j)+" class=dt></td>";
+ str+="</tr>";
+ }
+ document.write(str);
+ //-->
+ </script>
+ </table>
+ </td></tr></table>
+ <script language=javascript>
+ <!--//
+// var bCalLoaded=true;
+ //-->
+ </script>
+ 
+</body>
+ </html>
+ 

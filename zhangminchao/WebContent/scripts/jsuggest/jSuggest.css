@@ -1,0 +1,42 @@
+#jSuggestContainer {
+position:absolute;
+font-size: 100%;
+border:1px solid #00AA55;
+border-top:1;
+background:#FFF;
+}
+
+.jSuggestLoading {
+font-style:italic;
+/** padding: 10px; **/
+}
+
+#jSuggestContainer ul, #jSuggestContainer ul li{
+margin: 0;
+padding:0;
+
+list-style:none;
+}
+
+
+
+#jSuggestContainer ul li{
+/** padding: 2px 4px; **/
+	/**
+border-bottom: 1px dotted #00AA55;
+	**/
+font-size: 14px;
+padding-left:5px;
+background:#0;
+cursor:pointer;
+font: 14px/25px arial;
+}
+
+#jSuggestContainer ul li.last{
+border-bottom: 0;
+}
+
+#jSuggestContainer ul li.jSuggestHover{
+background:#EBEBEB;
+color:#333;
+}

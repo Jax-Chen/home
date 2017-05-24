@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans.xsd  
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd  
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 配置了这个，在程序中annotation就会起作用 ，例如@Resource、 -->
+	<context:annotation-config></context:annotation-config>
+
+	<!-- 添加了这个就不需要在xml文件里面配置，spring会自动在相应的包里面寻找 -->
+	<context:component-scan base-package="com.jesse"/>
+
+	<!-- 
+		配置数据源
+	 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/jesse?characterEncoding=UTF-8"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="admin"></property>
+	</bean>
+	
+	<!-- 
+		spring和mybatis整合配置
+	 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 配置数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 配置mybatis核心配置文件的路径 -->
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
+	</bean>
+	
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">  
+        <constructor-arg index="0" ref="sqlSessionFactory"/>  
+    </bean>
+	
+	
+	<!-- 
+		配置spring的事务管理器
+	 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 
+		配置事务通知
+	 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED"/>
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED"/>
+			<tx:method name="select*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 
+		配置事务需要用到的aop切面
+	 -->
+	<aop:config>
+		<!-- 
+			配置切点：com.jax.service包下的所有包的所有方法的所有参数
+		 -->
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.jesse.service..*.*(..))"/>
+	</aop:config>
+</beans>
